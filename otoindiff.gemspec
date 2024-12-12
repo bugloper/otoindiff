@@ -28,7 +28,8 @@ Gem::Specification.new do |spec|
   spec.bindir         = 'exe'
   spec.executables    = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths  = ['lib']
-
+  spec.metadata['rubygems_mfa_required'] = 'false'
+  # rubocop:enable Gemspec/RequireMFA
   # Runtime dependencies
   spec.add_runtime_dependency 'activesupport', '~> 8.0'
 end
