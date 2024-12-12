@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler/setup'
+require 'rake/testtask'
+require 'bundler/gem_tasks'
+
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+  t.test_files = FileList['test/**/*_test.rb']
+  t.verbose = true
+end
+
+desc 'Run tests and release the gem'
+task release: [:test] do
+  system('gem build otoindiff.gemspec')
+
+  version = `grep -m1 'version =' otoindiff.gemspec`.split("'")[1]
+
+  if system("gem push otoindiff-#{version}.gem")
+    puts "Successfully released otoindiff version #{version}"
+    system("rm otoindiff-#{version}.gem")
+  else
+    puts 'Failed to push gem'
+    exit 1
+  end
+end
+
+task default: :release

@@ -1,0 +1,31 @@
+module Otoindiff
+  VERSION: String
+
+  # Extended methods for Hash class with flexible key access
+  module HashExtensions
+    # Retrieve a value with flexible key type conversion
+    #
+    # @param key [String | Symbol | Object] The key to retrieve
+    # @return [Object?] The value associated with the key, or nil if not found
+    def [](key: String | Symbol | Object): Object?
+
+    # Dig into a nested hash with flexible key type conversion
+    #
+    # @param keys [Array<String | Symbol | Object>] Path of keys to traverse
+    # @return [Object?] The nested value, or nil if path is invalid
+    def dig(*keys: String | Symbol | Object): Object?
+
+    # Fetch a hash value with flexible key type conversion
+    #
+    # @param key [String | Symbol | Object] The key to retrieve
+    # @param default [Object?] Optional default value
+    # @param block [Proc?] Optional block for default value computation
+    # @return [Object] The value associated with the key
+    # @raise [KeyError] If key is not found and no default is provided
+    def fetch(
+      key: String | Symbol | Object, 
+      default: Object?, 
+      &block: -> Object?
+    ): Object
+  end
+end
