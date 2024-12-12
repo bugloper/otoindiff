@@ -5,4 +5,12 @@ require 'minitest/test_task'
 
 Minitest::TestTask.create
 
+namespace :benchmark do
+  desc 'Run benchmarks'
+  task :run do
+    puts 'Running benchmarks...'
+    system('ruby benchmarks/benchmarks.rb')
+  end
+end
+
 task default: :test
