@@ -2,9 +2,6 @@
 
 require_relative 'otoindiff/version'
 
-require 'active_support'
-require 'active_support/core_ext/hash/indifferent_access'
-
 # Extends Ruby's Hash class with more flexible key access methods
 #
 # This extension provides enhanced hash key lookup capabilities:
