@@ -5,5 +5,5 @@
 require 'bundler/setup'
 
 puts 'Running benchmarks...'
-system('ruby benchmarks/benchmarks.rb')
+system('ruby benchmarks/benchmark.rb')
 

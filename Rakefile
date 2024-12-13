@@ -9,7 +9,7 @@ namespace :benchmark do
   desc 'Run benchmarks'
   task :run do
     puts 'Running benchmarks...'
-    system('ruby benchmarks/benchmarks.rb')
+    system('ruby benchmarks/benchmark.rb')
   end
 end
 
