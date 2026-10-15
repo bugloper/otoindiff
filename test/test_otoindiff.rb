@@ -91,3 +91,41 @@ class OtoindiffTest < Minitest::Test
     assert_equal 'A', backend.translate(:en, 'nested.a')
   end
 end
+
+class OtoindiffDisabledTest < Minitest::Test
+  using Otoindiff::Disabled
+
+  def setup
+    @hash = { foo: 'bar', 'baz' => 'qux', nested: { key: 'value', list: [{ item: 1 }] } }
+  end
+
+  def test_brackets_are_strict
+    assert_equal 'bar', @hash[:foo]
+    assert_nil @hash['foo']
+    assert_nil @hash[:baz]
+  end
+
+  def test_fetch_is_strict
+    assert_equal 'bar', @hash.fetch(:foo)
+    assert_raises(KeyError) { @hash.fetch('foo') }
+    assert_equal('default', @hash.fetch('foo', 'default'))
+  end
+
+  def test_dig_is_strict_at_every_level
+    assert_equal 'value', @hash.dig(:nested, :key)
+    assert_nil @hash.dig('nested', :key)
+    assert_nil @hash.dig(:nested, 'key')
+    assert_equal 1, @hash.dig(:nested, :list, 0, :item)
+    assert_nil @hash.dig(:nested, :list, 0, 'item')
+  end
+end
+
+class OtoindiffOutsideDisabledTest < Minitest::Test
+  def test_other_classes_remain_indifferent
+    hash = { foo: 'bar' }
+    assert_equal 'bar', hash['foo']
+    assert_equal 'bar', hash.fetch('foo')
+    assert_equal 'bar', hash.dig('foo')
+  end
+end
+

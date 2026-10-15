@@ -63,3 +63,5 @@ class Hash
     alt && key?(alt) ? alt : key
   end
 end
+
+require_relative 'otoindiff/disabled'

@@ -1,7 +1,9 @@
 ## [Unreleased]
 
-## [0.1.1] - 2026-10-15
+## [0.2.0] - 2026-10-15
 
+- Add `Otoindiff::Disabled` refinement to opt a single class out of indifferent
+  access (`using Otoindiff::Disabled`) while the rest of the code base keeps it.
 - Fix i18n lookups always returning "Translation missing": hashes with a default proc
   (such as the i18n backend's translations store) now receive the caller's key instead
   of a converted one, so entries are no longer stored under the wrong key type.

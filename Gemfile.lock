@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    otoindiff (0.1.1)
+    otoindiff (0.2.0)
 
 GEM
   remote: https://rubygems.org/

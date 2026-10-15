@@ -1,6 +1,10 @@
 module Otoindiff
   VERSION: String
 
+  # Refinement restoring plain Hash key access where activated with `using`
+  module Disabled
+  end
+
   # Extended methods for Hash class with flexible key access
   module HashExtensions
     # Retrieve a value with flexible key type conversion
