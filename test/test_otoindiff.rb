@@ -49,4 +49,45 @@ class OtoindiffTest < Minitest::Test
     assert_nil @hash.dig(:nested, :missing)
     assert_nil @hash.dig('nested', 'missing')
   end
+
+  def test_default_proc_receives_original_key
+    hash = Hash.new { |h, k| h[k] = [] }
+    hash[:a] << 1
+    assert_equal({ a: [1] }, hash)
+  end
+
+  def test_access_with_falsy_value
+    assert_equal false, { 'x' => false }[:x]
+    assert_equal false, { x: false }['x']
+  end
+
+  def test_fetch_with_default_finds_other_key_type
+    assert_equal 'bar', @hash.fetch('foo', 'default')
+    assert_equal 'qux', @hash.fetch(:baz, 'default')
+  end
+
+  def test_fetch_with_block_finds_other_key_type
+    assert_equal('bar', @hash.fetch('foo') { 'computed default' })
+  end
+
+  def test_fetch_block_receives_original_key
+    assert_equal('missing', @hash.fetch('missing') { |k| k })
+  end
+
+  def test_fetch_missing_key_raises
+    assert_raises(KeyError) { @hash.fetch(:missing) }
+  end
+
+  def test_dig_into_array
+    assert_equal 20, { a: [10, 20] }.dig('a', 1)
+  end
+
+  def test_i18n_translations
+    require 'i18n'
+    backend = I18n::Backend::Simple.new
+    backend.store_translations(:en, greeting: 'Hello %{name}', nested: { a: 'A' })
+
+    assert_equal 'Hello Bob', backend.translate(:en, :greeting, name: 'Bob')
+    assert_equal 'A', backend.translate(:en, 'nested.a')
+  end
 end

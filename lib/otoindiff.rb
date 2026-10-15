@@ -24,33 +24,19 @@ class Hash
   # Retrieve a hash value with flexible key type conversion
   #
   # @param key [Object] The key to retrieve
-  # @return [Object, nil] The value associated with the key, or nil if not found
+  # @return [Object, nil] The value associated with the key, or the hash's default if not found
   def [](key)
-    return original_brackets(key) if key?(key)
-
-    if key.is_a?(String) || key.is_a?(Symbol)
-      original_brackets(key.to_s) || original_brackets(key.to_sym)
-    else
-      original_brackets(key)
-    end
+    original_brackets(otoindiff_key(key))
   end
 
   # Dig into a nested hash with flexible key type conversion
   #
-  # @param keys [Array<Object>] Path of keys to traverse
+  # @param key [Object] The first key to retrieve
+  # @param rest [Array<Object>] Remaining path of keys, passed on to the nested object's #dig
   # @return [Object, nil] The nested value, or nil if path is invalid
-  def dig(*keys)
-    keys.reduce(self) do |current, key|
-      break nil unless current.is_a?(Hash)
-
-      if key.is_a?(String) || key.is_a?(Symbol)
-        current.original_brackets(key) ||
-          current.original_brackets(key.to_s) ||
-          current.original_brackets(key.to_sym)
-      else
-        current.original_brackets(key)
-      end
-    end
+  def dig(key, *rest)
+    value = self[key]
+    rest.empty? || value.nil? ? value : value.dig(*rest)
   end
 
   # Fetch a hash value with flexible key type conversion and error handling
@@ -60,16 +46,20 @@ class Hash
   # @return [Object] The value associated with the key
   # @raise [KeyError] If key is not found and no default is provided
   def fetch(key, *args, &block)
-    return original_fetch(key, *args, &block) if key?(key)
+    original_fetch(otoindiff_key(key), *args, &block)
+  end
 
-    if key.is_a?(String) || key.is_a?(Symbol)
-      begin
-        original_fetch(key.to_s, *args, &block)
-      rescue KeyError
-        original_fetch(key.to_sym, *args, &block)
-      end
-    else
-      original_fetch(key, *args, &block)
-    end
+  private
+
+  # Resolve a String/Symbol key to whichever form is actually stored.
+  # Falls back to the caller's key so defaults and default procs receive it unchanged.
+  def otoindiff_key(key)
+    return key if key?(key)
+
+    alt = case key
+          when String then key.to_sym
+          when Symbol then key.to_s
+          end
+    alt && key?(alt) ? alt : key
   end
 end
