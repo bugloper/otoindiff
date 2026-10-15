@@ -82,6 +82,11 @@ class OtoindiffTest < Minitest::Test
     assert_equal 20, { a: [10, 20] }.dig('a', 1)
   end
 
+  def test_dig_through_non_diggable_value_raises_type_error
+    error = assert_raises(TypeError) { { a: 1 }.dig('a', :x) }
+    assert_equal 'Integer does not have #dig method', error.message
+  end
+
   def test_i18n_translations
     require 'i18n'
     backend = I18n::Backend::Simple.new
@@ -117,6 +122,11 @@ class OtoindiffDisabledTest < Minitest::Test
     assert_nil @hash.dig(:nested, 'key')
     assert_equal 1, @hash.dig(:nested, :list, 0, :item)
     assert_nil @hash.dig(:nested, :list, 0, 'item')
+  end
+
+  def test_dig_through_non_diggable_value_raises_type_error
+    error = assert_raises(TypeError) { @hash.dig(:foo, :x) }
+    assert_equal 'String does not have #dig method', error.message
   end
 end
 

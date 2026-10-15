@@ -32,7 +32,10 @@ module Otoindiff
         [key, *rest].reduce(self) do |current, k|
           break nil if current.nil?
 
-          current.is_a?(Hash) ? current.original_brackets(k) : current.dig(k)
+          next current.original_brackets(k) if current.is_a?(Hash)
+          raise TypeError, "#{current.class} does not have #dig method" unless current.respond_to?(:dig)
+
+          current.dig(k)
         end
       end
     end

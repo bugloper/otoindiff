@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-15
+
+- Fix `dig` raising `NoMethodError` instead of Ruby's `TypeError` when the path
+  continues past a value that has no `#dig` (e.g. `{ a: 1 }.dig(:a, :x)`), both
+  globally and under `using Otoindiff::Disabled`.
+
 ## [0.2.0] - 2026-10-15
 
 - Add `Otoindiff::Disabled` refinement to opt a single class out of indifferent

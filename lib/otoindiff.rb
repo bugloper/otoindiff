@@ -36,7 +36,10 @@ class Hash
   # @return [Object, nil] The nested value, or nil if path is invalid
   def dig(key, *rest)
     value = self[key]
-    rest.empty? || value.nil? ? value : value.dig(*rest)
+    return value if rest.empty? || value.nil?
+    raise TypeError, "#{value.class} does not have #dig method" unless value.respond_to?(:dig)
+
+    value.dig(*rest)
   end
 
   # Fetch a hash value with flexible key type conversion and error handling
